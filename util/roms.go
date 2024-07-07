@@ -8,7 +8,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/fogleman/nes/nes"
+	"github.com/iahob/nes/internal"
 )
 
 func testRom(path string) (err error) {
@@ -17,7 +17,7 @@ func testRom(path string) (err error) {
 			err = r.(error)
 		}
 	}()
-	console, err := nes.NewConsole(path)
+	console, err := internal.NewConsole(path)
 	if err != nil {
 		return err
 	}

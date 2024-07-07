@@ -15,9 +15,9 @@ import (
 	"os/user"
 	"path"
 
-	"github.com/fogleman/nes/nes"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
+	"github.com/iahob/nes/internal"
 )
 
 var homeDir string
@@ -58,14 +58,14 @@ func readKey(window *glfw.Window, key glfw.Key) bool {
 
 func readKeys(window *glfw.Window, turbo bool) [8]bool {
 	var result [8]bool
-	result[nes.ButtonA] = readKey(window, glfw.KeyZ) || (turbo && readKey(window, glfw.KeyA))
-	result[nes.ButtonB] = readKey(window, glfw.KeyX) || (turbo && readKey(window, glfw.KeyS))
-	result[nes.ButtonSelect] = readKey(window, glfw.KeyRightShift)
-	result[nes.ButtonStart] = readKey(window, glfw.KeyEnter)
-	result[nes.ButtonUp] = readKey(window, glfw.KeyUp)
-	result[nes.ButtonDown] = readKey(window, glfw.KeyDown)
-	result[nes.ButtonLeft] = readKey(window, glfw.KeyLeft)
-	result[nes.ButtonRight] = readKey(window, glfw.KeyRight)
+	result[internal.ButtonA] = readKey(window, glfw.KeyZ) || (turbo && readKey(window, glfw.KeyA))
+	result[internal.ButtonB] = readKey(window, glfw.KeyX) || (turbo && readKey(window, glfw.KeyS))
+	result[internal.ButtonSelect] = readKey(window, glfw.KeyRightShift)
+	result[internal.ButtonStart] = readKey(window, glfw.KeyEnter)
+	result[internal.ButtonUp] = readKey(window, glfw.KeyUp)
+	result[internal.ButtonDown] = readKey(window, glfw.KeyDown)
+	result[internal.ButtonLeft] = readKey(window, glfw.KeyLeft)
+	result[internal.ButtonRight] = readKey(window, glfw.KeyRight)
 	return result
 }
 
@@ -78,27 +78,27 @@ func readJoystick(joy glfw.Joystick, turbo bool) [8]bool {
 	axes := glfw.GetJoystickAxes(joy)
 	buttons := glfw.GetJoystickButtons(joy)
 	if joyname == "PLAYSTATION(R)3 Controller" {
-		result[nes.ButtonA] = buttons[14] == 1 || (turbo && buttons[2] == 1)
-		result[nes.ButtonB] = buttons[13] == 1 || (turbo && buttons[3] == 1)
-		result[nes.ButtonSelect] = buttons[0] == 1
-		result[nes.ButtonStart] = buttons[3] == 1
-		result[nes.ButtonUp] = buttons[4] == 1 || axes[1] < -0.5
-		result[nes.ButtonDown] = buttons[6] == 1 || axes[1] > 0.5
-		result[nes.ButtonLeft] = buttons[7] == 1 || axes[0] < -0.5
-		result[nes.ButtonRight] = buttons[5] == 1 || axes[0] > 0.5
+		result[internal.ButtonA] = buttons[14] == 1 || (turbo && buttons[2] == 1)
+		result[internal.ButtonB] = buttons[13] == 1 || (turbo && buttons[3] == 1)
+		result[internal.ButtonSelect] = buttons[0] == 1
+		result[internal.ButtonStart] = buttons[3] == 1
+		result[internal.ButtonUp] = buttons[4] == 1 || axes[1] < -0.5
+		result[internal.ButtonDown] = buttons[6] == 1 || axes[1] > 0.5
+		result[internal.ButtonLeft] = buttons[7] == 1 || axes[0] < -0.5
+		result[internal.ButtonRight] = buttons[5] == 1 || axes[0] > 0.5
 		return result
 	}
 	if len(buttons) < 8 {
 		return result
 	}
-	result[nes.ButtonA] = buttons[0] == 1 || (turbo && buttons[2] == 1)
-	result[nes.ButtonB] = buttons[1] == 1 || (turbo && buttons[3] == 1)
-	result[nes.ButtonSelect] = buttons[6] == 1
-	result[nes.ButtonStart] = buttons[7] == 1
-	result[nes.ButtonUp] = axes[1] < -0.5
-	result[nes.ButtonDown] = axes[1] > 0.5
-	result[nes.ButtonLeft] = axes[0] < -0.5
-	result[nes.ButtonRight] = axes[0] > 0.5
+	result[internal.ButtonA] = buttons[0] == 1 || (turbo && buttons[2] == 1)
+	result[internal.ButtonB] = buttons[1] == 1 || (turbo && buttons[3] == 1)
+	result[internal.ButtonSelect] = buttons[6] == 1
+	result[internal.ButtonStart] = buttons[7] == 1
+	result[internal.ButtonUp] = axes[1] < -0.5
+	result[internal.ButtonDown] = axes[1] > 0.5
+	result[internal.ButtonLeft] = axes[0] < -0.5
+	result[internal.ButtonRight] = axes[0] > 0.5
 	return result
 }
 
@@ -174,7 +174,7 @@ func savePNG(path string, im image.Image) error {
 
 func saveGIF(path string, frames []image.Image) error {
 	var palette []color.Color
-	for _, c := range nes.Palette {
+	for _, c := range internal.Palette {
 		palette = append(palette, c)
 	}
 	g := gif.GIF{}

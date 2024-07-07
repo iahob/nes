@@ -1,4 +1,4 @@
-package nes
+package internal
 
 const (
 	ButtonA = iota

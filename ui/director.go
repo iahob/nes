@@ -3,9 +3,9 @@ package ui
 import (
 	"log"
 
-	"github.com/fogleman/nes/nes"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
+	"github.com/iahob/nes/internal"
 )
 
 type View interface {
@@ -78,7 +78,7 @@ func (d *Director) PlayGame(path string) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	console, err := nes.NewConsole(path)
+	console, err := internal.NewConsole(path)
 	if err != nil {
 		log.Fatalln(err)
 	}

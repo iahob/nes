@@ -1,4 +1,4 @@
-package nes
+package internal
 
 import "encoding/gob"
 
@@ -134,9 +134,9 @@ func (apu *APU) output() float32 {
 
 // mode 0:    mode 1:       function
 // ---------  -----------  -----------------------------
-//  - - - f    - - - - -    IRQ (if bit 6 is clear)
-//  - l - l    l - l - -    Length counter and sweep
-//  e e e e    e e e e -    Envelope and linear counter
+//   - - - f    - - - - -    IRQ (if bit 6 is clear)
+//   - l - l    l - l - -    Length counter and sweep
+//     e e e e    e e e e -    Envelope and linear counter
 func (apu *APU) stepFrameCounter() {
 	switch apu.framePeriod {
 	case 4:
@@ -597,7 +597,7 @@ func (t *Triangle) output() byte {
 		return 0
 	}
 	if t.timerPeriod < 3 {
-		return 0;
+		return 0
 	}
 	if t.lengthValue == 0 {
 		return 0

@@ -4,9 +4,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/fogleman/nes/nes"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
+	"github.com/iahob/nes/internal"
 )
 
 const (
@@ -61,13 +61,13 @@ func (view *MenuView) checkButtons() {
 
 func (view *MenuView) onPress(index int) {
 	switch index {
-	case nes.ButtonUp:
+	case internal.ButtonUp:
 		view.j--
-	case nes.ButtonDown:
+	case internal.ButtonDown:
 		view.j++
-	case nes.ButtonLeft:
+	case internal.ButtonLeft:
 		view.i--
-	case nes.ButtonRight:
+	case internal.ButtonRight:
 		view.i++
 	default:
 		return
@@ -77,7 +77,7 @@ func (view *MenuView) onPress(index int) {
 
 func (view *MenuView) onRelease(index int) {
 	switch index {
-	case nes.ButtonStart:
+	case internal.ButtonStart:
 		view.onSelect()
 	}
 }

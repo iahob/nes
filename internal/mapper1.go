@@ -1,4 +1,4 @@
-package nes
+package internal
 
 import (
 	"encoding/gob"
@@ -179,8 +179,10 @@ func (m *Mapper1) chrBankOffset(index int) int {
 }
 
 // PRG ROM bank mode (0, 1: switch 32 KB at $8000, ignoring low bit of bank number;
-//                    2: fix first bank at $8000 and switch 16 KB bank at $C000;
-//                    3: fix last bank at $C000 and switch 16 KB bank at $8000)
+//
+//	2: fix first bank at $8000 and switch 16 KB bank at $C000;
+//	3: fix last bank at $C000 and switch 16 KB bank at $8000)
+//
 // CHR ROM bank mode (0: switch 8 KB at a time; 1: switch two separate 4 KB banks)
 func (m *Mapper1) updateOffsets() {
 	switch m.prgMode {

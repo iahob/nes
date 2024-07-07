@@ -1,45 +1,44 @@
-package nes
+package internal
 
 import (
 	"encoding/gob"
 	"log"
 )
 
-type Mapper2 struct {
+type Mapper3 struct {
 	*Cartridge
-	prgBanks int
+	chrBank  int
 	prgBank1 int
 	prgBank2 int
 }
 
-func NewMapper2(cartridge *Cartridge) Mapper {
+func NewMapper3(cartridge *Cartridge) Mapper {
 	prgBanks := len(cartridge.PRG) / 0x4000
-	prgBank1 := 0
-	prgBank2 := prgBanks - 1
-	return &Mapper2{cartridge, prgBanks, prgBank1, prgBank2}
+	return &Mapper3{cartridge, 0, 0, prgBanks - 1}
 }
 
-func (m *Mapper2) Save(encoder *gob.Encoder) error {
-	encoder.Encode(m.prgBanks)
+func (m *Mapper3) Save(encoder *gob.Encoder) error {
+	encoder.Encode(m.chrBank)
 	encoder.Encode(m.prgBank1)
 	encoder.Encode(m.prgBank2)
 	return nil
 }
 
-func (m *Mapper2) Load(decoder *gob.Decoder) error {
-	decoder.Decode(&m.prgBanks)
+func (m *Mapper3) Load(decoder *gob.Decoder) error {
+	decoder.Decode(&m.chrBank)
 	decoder.Decode(&m.prgBank1)
 	decoder.Decode(&m.prgBank2)
 	return nil
 }
 
-func (m *Mapper2) Step() {
+func (m *Mapper3) Step() {
 }
 
-func (m *Mapper2) Read(address uint16) byte {
+func (m *Mapper3) Read(address uint16) byte {
 	switch {
 	case address < 0x2000:
-		return m.CHR[address]
+		index := m.chrBank*0x2000 + int(address)
+		return m.CHR[index]
 	case address >= 0xC000:
 		index := m.prgBank2*0x4000 + int(address-0xC000)
 		return m.PRG[index]
@@ -50,21 +49,22 @@ func (m *Mapper2) Read(address uint16) byte {
 		index := int(address) - 0x6000
 		return m.SRAM[index]
 	default:
-		log.Fatalf("unhandled mapper2 read at address: 0x%04X", address)
+		log.Fatalf("unhandled mapper3 read at address: 0x%04X", address)
 	}
 	return 0
 }
 
-func (m *Mapper2) Write(address uint16, value byte) {
+func (m *Mapper3) Write(address uint16, value byte) {
 	switch {
 	case address < 0x2000:
-		m.CHR[address] = value
+		index := m.chrBank*0x2000 + int(address)
+		m.CHR[index] = value
 	case address >= 0x8000:
-		m.prgBank1 = int(value) % m.prgBanks
+		m.chrBank = int(value & 3)
 	case address >= 0x6000:
 		index := int(address) - 0x6000
 		m.SRAM[index] = value
 	default:
-		log.Fatalf("unhandled mapper2 write at address: 0x%04X", address)
+		log.Fatalf("unhandled mapper3 write at address: 0x%04X", address)
 	}
 }

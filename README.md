@@ -32,7 +32,7 @@ On Mac, you can use homebrew:
 The `go get` command will automatically fetch the dependencies listed above,
 compile the binary and place it in your `$GOPATH/bin` directory.
 
-    go get github.com/fogleman/nes
+    go get github.com/iahob/nes
 
 ### Usage
 

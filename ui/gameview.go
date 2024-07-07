@@ -3,16 +3,16 @@ package ui
 import (
 	"image"
 
-	"github.com/fogleman/nes/nes"
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
+	"github.com/iahob/nes/internal"
 )
 
 const padding = 0
 
 type GameView struct {
 	director *Director
-	console  *nes.Console
+	console  *internal.Console
 	title    string
 	hash     string
 	texture  uint32
@@ -20,7 +20,7 @@ type GameView struct {
 	frames   []image.Image
 }
 
-func NewGameView(director *Director, console *nes.Console, title, hash string) View {
+func NewGameView(director *Director, console *internal.Console, title, hash string) View {
 	texture := createTexture()
 	return &GameView{director, console, title, hash, texture, false, nil}
 }
@@ -146,7 +146,7 @@ func drawBuffer(window *glfw.Window) {
 	gl.End()
 }
 
-func updateControllers(window *glfw.Window, console *nes.Console) {
+func updateControllers(window *glfw.Window, console *internal.Console) {
 	turbo := console.PPU.Frame%6 < 3
 	k1 := readKeys(window, turbo)
 	j1 := readJoystick(glfw.Joystick1, turbo)
